@@ -28,7 +28,7 @@ export const SensorCard = ({ sensor }: props) => {
 				</Typography>
 			</CardContent>
 			<CardActions>
-				<Button size="small" variant="contained"> Ver Gráfico</Button>
+				<Button size="small" variant="contained">Ver Gráfico</Button>
                 <Switch defaultChecked />
 			</CardActions>
 		</Card>
