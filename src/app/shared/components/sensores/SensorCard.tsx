@@ -21,10 +21,10 @@ export const SensorCard = ({ sensor }: props) => {
 			/>
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div">
-					{sensor.nombreSensor}
+					{sensor.nombre}
 				</Typography>
 				<Typography variant="body2" color="text.secondary">
-					Latitud: {sensor.latitud} - Longitud: {sensor.longitud}
+					Latitud: no tiene - Longitud: no tiene
 				</Typography>
 			</CardContent>
 			<CardActions>

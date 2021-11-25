@@ -207,36 +207,6 @@ export const Drawer = (): JSX.Element => {
 									/>
 								</ListItem>
 							</div>
-							{/* <div className="flex items-center">
-								<ChevronRight className="text-black-50" />
-								<ListItem
-									button
-									onClick={() => {
-										historyPush("/main/produccion/traza");
-									}}
-								>
-									<ListItemText
-										primary={"Administrar Trazabilidad"}
-										className="text-black-50"
-									/>
-								</ListItem>
-							</div>
-							<div className="flex items-center">
-								<ChevronRight className="text-black-50" />
-								<ListItem
-									button
-									onClick={() => {
-										historyPush(
-											"/main/mes/production-orders"
-										);
-									}}
-								>
-									<ListItemText
-										primary={"Ordenes de producción"}
-										className="text-black-50"
-									/>
-								</ListItem>
-							</div> */}
 						</AccordionDetails>
 					</Accordion>
 					<Accordion className={classes.accordion}>
