@@ -5,6 +5,8 @@ import { LoginScreen } from "../shared/components/auth/LoginScreen";
 import { DashboardScreen } from "../shared/components/dashboard/DashboardScreen";
 import { PublicRoute } from "./PublicRoute";
 import { PrivateRoute } from "./PrivateRoute";
+import { ContactUs } from "../shared/components/contact/ContactUs";
+
 
 
 
@@ -27,6 +29,14 @@ export const AppRouter = (): JSX.Element => {
 					element={
 						<PrivateRoute>
 							<DashboardScreen />
+						</PrivateRoute>
+					}
+				/>
+				<Route
+					path="/contact"
+					element={
+						<PrivateRoute>
+							<ContactUs/>
 						</PrivateRoute>
 					}
 				/>

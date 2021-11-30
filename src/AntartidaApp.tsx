@@ -6,16 +6,15 @@ import { AppRouter } from "./app/routers/AppRouter";
 
 export interface sensor {
 	id: number;
-	nombreSensor: string;
+	nombre: string;
 	latitud: number;
 	longitud: number;
 }
 
 export const AntartidaApp = (): JSX.Element => {
 	moment.locale("es-ar");
-
 	return (
-		<div style={{ backgroundColor: "#efe1e1", height:"100vh" }}>
+		<div>
 			<Provider store={store}>
 				<AppRouter />
 			</Provider>

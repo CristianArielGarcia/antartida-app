@@ -9,16 +9,12 @@ import { Switch } from "@mui/material";
 
 interface props {
 	sensor: any;
+	onVerGrafico: any;
 }
 
-export const SensorCard = ({ sensor }: props) => {
+export const SensorCard = ({ sensor,onVerGrafico }: props) => {
 	return (
-		<Card sx={{ maxWidth: 345 }}>
-			<CardMedia
-				component="img"
-				height="100"
-				image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToWLO2969QuO8Md8R1gkqbLKzxQo4kDppOXA&usqp=CAU"
-			/>
+		<Card sx={{ maxWidth: 150 }}>
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div">
 					{sensor.nombre}
@@ -28,7 +24,7 @@ export const SensorCard = ({ sensor }: props) => {
 				</Typography>
 			</CardContent>
 			<CardActions>
-				<Button size="small" variant="contained">Ver Gráfico</Button>
+				<Button onClick= { (evento) => onVerGrafico(evento)} value={sensor.id} size="small" variant="contained">Ver Gráfico</Button>
                 <Switch defaultChecked />
 			</CardActions>
 		</Card>
