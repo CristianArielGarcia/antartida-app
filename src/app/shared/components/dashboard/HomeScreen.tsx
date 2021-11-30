@@ -22,10 +22,10 @@ interface sensor {
 	latitud: number;
 	longitud: number;
 }
-import { unwrapResult } from "@reduxjs/toolkit";
-import { useAppDispatch } from "app/middleware/store/store";
-import { SensorSliceRequests } from "app/middleware/reducers/sensorSlice";
-import { ISensor } from "app/models/ISensor";
+// import { unwrapResult } from "@reduxjs/toolkit";
+// import { useAppDispatch } from "app/middleware/store/store";
+// import { SensorSliceRequests } from "app/middleware/reducers/sensorSlice";
+// import { ISensor } from "app/models/ISensor";
 
 interface lectura{
 	id: number;
