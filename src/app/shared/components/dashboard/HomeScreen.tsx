@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from "react";
 import { SensorCard } from "../sensores/SensorCard";
 import { Line } from "react-chartjs-2";
@@ -5,20 +6,16 @@ import {
 	Chart as ChartJS,
 	CategoryScale,
 	LinearScale,
-	BarElement,
 	PointElement,
 	LineElement,
 	Title,
 	Tooltip,
 	Legend,
 } from "chart.js";
-
-interface sensor {
-	id: number;
-	nombreSensor: string;
-	latitud: number;
-	longitud: number;
-}
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useAppDispatch } from "app/middleware/store/store";
+import { SensorSliceRequests } from "app/middleware/reducers/sensorSlice";
+import { ISensor } from "app/models/ISensor";
 
 export const HomeScreen = (): JSX.Element => {
 	ChartJS.register(
@@ -30,25 +27,23 @@ export const HomeScreen = (): JSX.Element => {
 		Tooltip,
 		Legend
 	);
-	const axios = require("axios").default;
+	const dispatch = useAppDispatch();
 
-	const [sensores, setSensores] = React.useState<sensor[]>([]);
-
-	const idSensor = 1;
+	const [sensores, setSensores] = React.useState<ISensor[]>([]);
 
 	const getAllSensores = async () => {
 		let fetchSensoresRequest;
 
 		try {
-			fetchSensoresRequest = await axios.get(
-				`http://127.0.0.1:8000/api/sensor`
+			fetchSensoresRequest = unwrapResult(
+				await dispatch(SensorSliceRequests.getAllRequest())
 			);
 		} catch (error) {
-			console.error(error);
+			fetchSensoresRequest = null;
 		}
-		if (fetchSensoresRequest?.data) {
-			setSensores(fetchSensoresRequest.data);
-			console.log(fetchSensoresRequest.data);
+
+		if (fetchSensoresRequest) {
+			setSensores(fetchSensoresRequest);
 		}
 	};
 

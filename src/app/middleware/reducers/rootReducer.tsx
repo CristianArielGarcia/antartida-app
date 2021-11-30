@@ -1,10 +1,11 @@
+import { SensorSlice } from "./sensorSlice";
 
 
 
 export const rootReducer = {
 
     //---------SENSOR REDUCER------------
-    // sensor: sensorSlice.reducer,
+    sensor: SensorSlice.reducer,
 
     //---------USUARIO REDUCER------------
     // usuario: usuarioSlice.reducer,

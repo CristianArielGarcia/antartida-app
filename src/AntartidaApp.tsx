@@ -15,7 +15,7 @@ export const AntartidaApp = (): JSX.Element => {
 	moment.locale("es-ar");
 
 	return (
-		<div style={{ backgroundColor: "#efe1e1", height:"100vh" }}>
+		<div style={{ height:"100vh" }}>
 			<Provider store={store}>
 				<AppRouter />
 			</Provider>
