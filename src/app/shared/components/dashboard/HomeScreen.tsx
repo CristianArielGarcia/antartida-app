@@ -76,12 +76,9 @@ export const HomeScreen = (): JSX.Element => {
 
 	const onVerGrafico = (event: any) => {
 		let sensor = event.target.value
-		let sensorSel
 		try {
 			axios.get(`http://127.0.0.1:8000/api/lectura/${sensor}`)
 			.then((response: any) => setLecturas(response.data))
-			console.log(sensor)
-			console.log(sensores)
 			options.plugins.title.text = sensores.find(x => x.id == sensor)?.nombre!
 		} catch (error) {
 			console.error(error);
