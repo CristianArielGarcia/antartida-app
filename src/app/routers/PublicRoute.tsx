@@ -4,7 +4,7 @@ export const PublicRoute = ({ children }: any): JSX.Element => {
     // agregarle que cuando se autentifique lo redireccione al main
 
     const user = {
-        logged: true,
+        logged: false,
         nombre: "Cristian",
     };
 

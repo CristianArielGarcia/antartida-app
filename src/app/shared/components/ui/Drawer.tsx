@@ -10,7 +10,6 @@ import {
 	AccordionDetails,
 	AccordionSummary,
 	Avatar,
-	Icon,
 	ListItemIcon,
 } from "@mui/material";
 import {
@@ -35,7 +34,7 @@ import {
 // import { authenticationSlice } from "@app/Middleware/reducers/AuthenticationSlice";
 // import { useAppDispatch, useAppSelector } from "@app/Middleware/store/store";
 // import { ThemeToggle } from "../themeToggle";
-import { Navigate } from "react-router";
+import {  useNavigate } from "react-router";
 import { makeStyles } from "@mui/styles";
 const useStyles = makeStyles(() => ({
 	list: {
@@ -100,6 +99,7 @@ const useStyles = makeStyles(() => ({
 
 export const Drawer = (): JSX.Element => {
 	const classes = useStyles();
+	const navigate = useNavigate();
 	// const dispatch = useAppDispatch();
 	const [isOpen, setIsOpen] = React.useState<boolean>(false);
 	// const { State: InfoUsuario } = useFetchApi<IPersonal>(
@@ -114,7 +114,7 @@ export const Drawer = (): JSX.Element => {
 	// };
 
 	const historyPush = (page: string) => {
-		<Navigate to={page} />;
+		navigate(page);
 		setIsOpen(false);
 	};
 
@@ -198,7 +198,7 @@ export const Drawer = (): JSX.Element => {
 								<ListItem
 									button
 									onClick={() => {
-										historyPush("/main/produccion/prod");
+										historyPush("/main");
 									}}
 								>
 									<ListItemText
@@ -232,7 +232,7 @@ export const Drawer = (): JSX.Element => {
 								<ListItem
 									button
 									onClick={() => {
-										historyPush("/main/calidad/calidad");
+										historyPush("/users");
 									}}
 								>
 									<ListItemText
@@ -247,7 +247,7 @@ export const Drawer = (): JSX.Element => {
 									button
 									onClick={() => {
 										historyPush(
-											"/main/calidad/no-conformes"
+											"/user/new"
 										);
 									}}
 								>
@@ -291,20 +291,6 @@ export const Drawer = (): JSX.Element => {
 									/>
 								</ListItem>
 							</div>
-							{/* <div className="flex items-center">
-								<ChevronRight className="text-black-50" />
-								<ListItem
-									button
-									onClick={() => {
-										historyPush("/main/baterias/view");
-									}}
-								>
-									<ListItemText
-										primary={"Vista de baterías"}
-										className="text-black-50"
-									/>
-								</ListItem>
-							</div> */}
 						</AccordionDetails>
 					</Accordion>
 					<Divider />

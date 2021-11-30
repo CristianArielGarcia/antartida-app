@@ -14,7 +14,7 @@ export interface sensor {
 export const AntartidaApp = (): JSX.Element => {
 	moment.locale("es-ar");
 	return (
-		<div>
+		<div style={{ height:"100vh" }}>
 			<Provider store={store}>
 				<AppRouter />
 			</Provider>
