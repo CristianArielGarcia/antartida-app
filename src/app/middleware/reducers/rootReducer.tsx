@@ -10,6 +10,7 @@ export const rootReducer = {
     //---------USUARIO REDUCER------------
     // usuario: usuarioSlice.reducer,
 
-
+    //---------LECTURA REDUCER------------
+    // lectura: LecturaSlice.reducer,
     
 }
