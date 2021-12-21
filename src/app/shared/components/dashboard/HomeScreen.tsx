@@ -270,7 +270,7 @@ export const HomeScreen = (): JSX.Element => {
 					</LocalizationProvider>
 					<Box sx={{ mx: 2 }}></Box>
 					<Button
-						onClick={(evento) => onBuscar()}
+						onClick={onBuscar}
 						size="small"
 						variant="contained"
 						disabled={sensor == null || rangoFecha[0] == null || rangoFecha[1] == null}
