@@ -83,7 +83,7 @@ export class SensorService {
 		return new Promise((resolve, reject) => {
 			axios
 				.put<boolean>(
-					`${process.env.REACT_APP_API_URL}/${this.Url}`,
+					`${process.env.REACT_APP_API_URL}/${this.Url}/Update/${entity.id}`,
 					entity
 				)
 				.then(function (response) {

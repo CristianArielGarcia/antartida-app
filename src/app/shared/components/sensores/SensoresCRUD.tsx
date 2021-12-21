@@ -115,7 +115,7 @@ export const SensoresCRUD = (): JSX.Element => {
 				openPopup={modalOpen}
 				setOpenPopup={setModalOpen}
 			>
-				<SensorDialog idSensor={selectedSensor} setOpenPopup={setModalOpen}/>
+				<SensorDialog idSensor={selectedSensor} setOpenPopup={setModalOpen} callback={onInit}/>
 			</ModalCompoment>
 		</div>
 	);

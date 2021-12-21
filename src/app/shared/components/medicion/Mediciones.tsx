@@ -55,10 +55,10 @@ export const Mediciones = ({ lectura }: prop): JSX.Element => {
 	}, []);
 
 	return (
-		<div className="w-full">
+		<div className="w-96">
 			<Accordion className="m-1 text-center text-base">
 				<AccordionSummary expandIcon={<ExpandMoreIcon />} id="panel-content">
-					<span className="text-lg font-bold">
+					<span className="text-lg">
 						Fecha de la Lectura: {moment(lectura?.fecha_lectura).format("DD-MM-YYYY")}
 					</span>
 					{/* <Typography className="m-1 ">tipo: {med?.tipo_medicion.nombre}</Typography>
@@ -66,11 +66,21 @@ export const Mediciones = ({ lectura }: prop): JSX.Element => {
 					{/* {verificarEstado(lectura?.estadoReproceso)} */}
 				</AccordionSummary>
 				<AccordionDetails>
+					{lectura.mediciones.map((lec) => {
+						return (
+							<div className="text-left">
+								<a>
+									{lec.tipo_medicion.nombre} {lec.valor}
+									{lec.tipo_medicion.unidad_de_medida}
+								</a>
+							</div>
+						);
+					})}
 					{/* <div className="grid grid-cols-1 text-center w-full">
 							<a>Tipo de medicion: {med?.tipo_medicion.nombre}</a>
 							<a>Valor: {med?.valor}{med?.tipo_medicion.unidad_de_medida}</a>
 						</div> */}
-					<MedicionesTable mediciones={lectura.mediciones} />
+					{/* <MedicionesTable mediciones={lectura.mediciones} /> */}
 				</AccordionDetails>
 			</Accordion>
 			<br />

@@ -23,6 +23,7 @@ import { MaterialButtons } from "../material-iu/MaterialButtons";
 interface props {
 	idSensor: number;
 	setOpenPopup: any;
+	callback: any;
 }
 
 const useAccordionDetails = makeStyles(() =>
@@ -36,7 +37,7 @@ const useAccordionDetails = makeStyles(() =>
 	})
 );
 
-export const SensorDialog = ({ idSensor, setOpenPopup }: props): JSX.Element => {
+export const SensorDialog = ({ idSensor, setOpenPopup, callback }: props): JSX.Element => {
 	const buttonClasses = MaterialButtons();
 	const { darkMode } = useAppSelector((state) => state.colorApp);
 	const useButtons: any = makeStyles(() =>
@@ -125,17 +126,19 @@ export const SensorDialog = ({ idSensor, setOpenPopup }: props): JSX.Element => 
 			"🚀 ~ file: SensorDialog.tsx ~ line 114 ~ handleGuardar ~ nuevoSensor",
 			nuevoSensor
 		);
-		// let sensorUpdateResult;
-		// try {
-		// 	sensorUpdateResult = unwrapResult(
-		// 		await dispatch(SensorSliceRequests.putRequest(nuevoSensor))
-		// 	);
-		// } catch (error) {
-		// 	sensorUpdateResult = null;
-		// }
+		let sensorUpdateResult;
+		try {
+			sensorUpdateResult = unwrapResult(
+				await dispatch(SensorSliceRequests.putRequest(nuevoSensor))
+			);
+		} catch (error) {
+			sensorUpdateResult = null;
+		}
 
-		// if (sensorUpdateResult) {
-		// }
+		if (sensorUpdateResult) {
+			callback(); //esto deberia actualizar la tabla
+			setOpenPopup(false);
+		}
 	};
 
 	return (
@@ -153,7 +156,7 @@ export const SensorDialog = ({ idSensor, setOpenPopup }: props): JSX.Element => 
 							Editar
 						</Button>
 					</div>
-					<div style={{ width: "70vw", textAlign: "center" }}>
+					<div style={{ width: "50vw", textAlign: "center" }}>
 						<div className="inline-grid sm:inline-flex  sm:gap-x-36 gap-x-10">
 							{/* ----------------NOMBRE SENSOR---------------*/}
 							<div className="text-center sm:text-left p-2">
@@ -204,7 +207,7 @@ export const SensorDialog = ({ idSensor, setOpenPopup }: props): JSX.Element => 
 								/>
 							</div>
 						</div>
-						<div className="w-full sm:mb-2">
+						<div className="inline-grid w-96 sm:mb-2 ">
 							<Accordion>
 								<AccordionSummary
 									expandIcon={<ExpandMoreIcon />}
@@ -231,20 +234,22 @@ export const SensorDialog = ({ idSensor, setOpenPopup }: props): JSX.Element => 
 					</div>
 				</div>
 			)}
-			<Button
-				className={buttonClasses.greenButton}
-				variant="contained"
-				onClick={handleGuardar}
-			>
-				Guardar
-			</Button>
-			<Button
-				className={buttonClasses.redButton}
-				variant="contained"
-				onClick={handleCancelar}
-			>
-				Cancelar
-			</Button>
+			<div className="inline-grid sm:flex sm:content-center sm:gap-x-36 gap-x-10">
+				<Button
+					className={buttonClasses.greenButton}
+					variant="contained"
+					onClick={handleGuardar}
+				>
+					Guardar
+				</Button>
+				<Button
+					className={buttonClasses.redButton}
+					variant="contained"
+					onClick={handleCancelar}
+				>
+					Cancelar
+				</Button>
+			</div>
 		</div>
 	);
 };
