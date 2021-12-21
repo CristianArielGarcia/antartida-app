@@ -9,6 +9,9 @@ import { SensorSliceRequests } from "app/middleware/reducers/sensorSlice";
 import { useAppDispatch } from "app/middleware/store/store";
 import { ModalCompoment } from "../ui/ModalComponent";
 import { SensorDialog } from "./SensorDialog";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Swal from "sweetalert2";
+
 
 export const SensoresCRUD = (): JSX.Element => {
 	const [sensores, setSensores] = React.useState<ISensor[]>([]);
@@ -50,6 +53,37 @@ export const SensoresCRUD = (): JSX.Element => {
 		setModalOpen(true);
 	};
 
+	const eliminarSensor = async (id: number) => {
+		let sensorDeleteResult;
+		try {
+			sensorDeleteResult = unwrapResult(
+				await dispatch(SensorSliceRequests.deleteRequest(id))
+			);
+		} catch (error) {
+			sensorDeleteResult = null;
+		}
+		if (sensorDeleteResult) {
+			onInit(); //esto deberia actualizar la tabla
+		}
+	};
+
+	const handleEliminar = async (id: number) => {
+		Swal.fire({
+			title: "Está seguro que desea eliminar este sensor?",
+			showDenyButton: true,
+			confirmButtonText: "Si",
+			denyButtonText: `Cancelar`,
+		}).then((result) => {
+			/* Read more about isConfirmed, isDenied below */
+			if (result.isConfirmed) {
+				eliminarSensor(id);
+				Swal.fire("Eliminado!", "", "success");
+			} else if (result.isDenied) {
+				Swal.fire("Cambios descartados", "", "info");
+			}
+		});
+	};
+
 	return (
 		<div className="my-2 ml-36" style={{ width: "80vw" }}>
 			<div>
@@ -84,6 +118,17 @@ export const SensoresCRUD = (): JSX.Element => {
 												<Info />
 											</IconButton>
 										</div>
+										<div>
+											<IconButton
+												onClick={() => {
+													handleEliminar(row?.id);
+												}}
+												size="small"
+												style={{ position: "relative" }}
+											>
+												<DeleteIcon />
+											</IconButton>
+										</div>
 									</div>
 								);
 							},
@@ -115,7 +160,11 @@ export const SensoresCRUD = (): JSX.Element => {
 				openPopup={modalOpen}
 				setOpenPopup={setModalOpen}
 			>
-				<SensorDialog idSensor={selectedSensor} setOpenPopup={setModalOpen} callback={onInit}/>
+				<SensorDialog
+					idSensor={selectedSensor}
+					setOpenPopup={setModalOpen}
+					callback={onInit}
+				/>
 			</ModalCompoment>
 		</div>
 	);

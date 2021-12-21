@@ -98,7 +98,7 @@ export class SensorService {
 		return new Promise((resolve, reject) => {
 			axios
 				.delete<boolean>(
-					`${process.env.REACT_APP_API_URL}/${this.Url}?Id=${Id}`
+					`${process.env.REACT_APP_API_URL}/${this.Url}/Delete/${Id}`
 				)
 				.then(function (response) {
 					resolve(response.data);

@@ -107,6 +107,7 @@ export const SensorDialog = ({ idSensor, setOpenPopup, callback }: props): JSX.E
 		setEditable(!editable);
 	};
 
+	
 	const handleCancelar = () => {
 		setOpenPopup(false);
 	};
