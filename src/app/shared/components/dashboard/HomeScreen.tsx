@@ -19,8 +19,9 @@ import { useAppDispatch } from "app/middleware/store/store";
 import { SensorSliceRequests } from "app/middleware/reducers/sensorSlice";
 import { ISensor } from "app/models/ISensor";
 import { ILectura } from "app/models/ILectura";
-import { IMedicion } from "app/models/IMedicion";
-import { ITipoMedicion } from "app/models/ITipoMedicion";
+import { LecturaSliceRequests } from "app/middleware/reducers/lecturaSlice";
+import useAppTitle from "app/shared/hooks/useAppTitle";
+
 
 let options = {
 	responsive: true,
@@ -37,11 +38,16 @@ let options = {
 
 export const HomeScreen = (): JSX.Element => {
 	ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
-	const axios = require("axios").default;
 
 	const [sensores, setSensores] = React.useState<ISensor[]>([]);
 	const [lecturas, setLecturas] = React.useState<ILectura[]>([]);
 	const dispatch = useAppDispatch();
+	const { TitleChanger } = useAppTitle();
+
+
+	React.useEffect(() => {
+		TitleChanger("DASHBOARD DE SENSORES");
+	}, []);
 
 	const getAllSensores = async () => {
 		let fetchSensoresRequest;
@@ -59,16 +65,20 @@ export const HomeScreen = (): JSX.Element => {
 		}
 	};
 
-	const onVerGrafico = (event: any) => {
-		let sensor = event.target.value;
+	const onVerGrafico = async (sensor: ISensor) => {
+		let fetchLecturasRequest;
+
 		try {
-			axios.get(`http://127.0.0.1:8000/api/lectura/${sensor}`).then((response: any) => {
-				console.log(response.data);
-				setLecturas(response.data);
-			});
-			options.plugins.title.text = sensores.find((x) => x.id === sensor)?.nombre!;
+			fetchLecturasRequest = unwrapResult(
+				await dispatch(LecturaSliceRequests.getLecturaBySensorRequest(sensor.id))
+			);
 		} catch (error) {
-			console.error(error);
+			fetchLecturasRequest = null;
+		}
+
+		if (fetchLecturasRequest) {
+			options.plugins.title.text = sensor.nombre!;
+			setLecturas(fetchLecturasRequest);
 		}
 	};
 
@@ -95,9 +105,6 @@ export const HomeScreen = (): JSX.Element => {
 				}
 				//si tiene algun elemento
 				else {
-					// let indice = _.findIndex(tipoMediciones, function (tipo: ITipoMedicion) {
-					// 	return tipo.nombre === medicion.tipoMedicion.nombre;
-					// });
 					let indice = tipoMediciones.findIndex((tipo) => {
 						return tipo.nombre === medicion?.tipo_medicion?.nombre;
 					});
@@ -146,7 +153,7 @@ export const HomeScreen = (): JSX.Element => {
 				))}
 			</div>
 			{lecturas.length > 0 ? (
-				<div className="p-10">
+				<div className="p-10 max-w-7xl">
 					<Line options={options} data={getData()} />
 				</div>
 			) : null}

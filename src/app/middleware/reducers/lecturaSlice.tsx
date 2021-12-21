@@ -1,10 +1,11 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IIniState } from "../../models/IInitState";
-import { ISensor } from "../../models/ISensor";
-import { SensorService } from "../../services/sensor.service";
+import { IIniState } from "app/models/IInitState";
+import { ILectura } from "app/models/ILectura";
+import { LecturaService } from "app/services/lectura.service";
 import { errorNotification } from "../helperMiddleware/errorNotifications";
+
 //<IAuth, IAuthUser>
-const sensorService = new SensorService();
+const lecturaService = new LecturaService();
 
 interface prop {
 	modeloA: string;
@@ -15,10 +16,10 @@ interface lecturasProp {
 	fecha: string;
 }
 
-class SensorClassSlice {
-	constructor(private service: SensorService) {}
-	getAllLecturasRequest = createAsyncThunk<ISensor[], prop>(
-		`Sensor/GetAllLecturas`,
+class LecturaClassSlice {
+	constructor(private service: LecturaService) {}
+	getAllLecturasRequest = createAsyncThunk<ILectura[], prop>(
+		`Lectura/GetAllLecturas`,
 		async (modelo, info) => {
 			return await errorNotification(
 				() =>
@@ -30,19 +31,28 @@ class SensorClassSlice {
 			);
 		}
 	);
-	getSensorByIdRequest = createAsyncThunk<ISensor, number>(
-		`Sensor/Detail`,
+	getLecturaByIdRequest = createAsyncThunk<ILectura, number>(
+		`Lectura/GetLecturaById`,
 		async (modelo, info) => {
 			return await errorNotification(
-				() => this.service.getSensorByIdRequest(modelo),
+				() => this.service.getLecturaByIdRequest(modelo),
+				info
+			);
+		}
+	);
+	getLecturaBySensorRequest = createAsyncThunk<ILectura[], number>(
+		`Lectura/by-sensor`,
+		async (modelo, info) => {
+			return await errorNotification(
+				() => this.service.getLecturaBySensorRequest(modelo),
 				info
 			);
 		}
 	);
 	getAllLecturasByFechaRequest = createAsyncThunk<
-		ISensor[],
+		ILectura[],
 		lecturasProp
-	>(`Sensor/GetAllByFecha`, async (modelo, info) => {
+	>(`Lectura/GetAllByFecha`, async (modelo, info) => {
 		return await errorNotification(
 			() =>
 				this.service.getAllLecturasByFechaRequest(
@@ -51,8 +61,8 @@ class SensorClassSlice {
 			info
 		);
 	});
-	getAllRequest = createAsyncThunk<ISensor[]>(
-		`Sensor/GetAll`,
+	getAllRequest = createAsyncThunk<ILectura[]>(
+		`Lectura/GetAll`,
 		async (info, thunk) => {
 			return await errorNotification(
 				() => this.service.getAllRequest(),
@@ -60,8 +70,8 @@ class SensorClassSlice {
 			);
 		}
 	);
-	postRequest = createAsyncThunk<ISensor, ISensor>(
-		`Sensor/PostRequest`,
+	postRequest = createAsyncThunk<ILectura, ILectura>(
+		`Lectura/PostRequest`,
 
 		async (modelo, info) => {
 			return await errorNotification(
@@ -70,8 +80,8 @@ class SensorClassSlice {
 			);
 		}
 	);
-	putRequest = createAsyncThunk<boolean, ISensor>(
-		`Sensor/PutRequest`,
+	putRequest = createAsyncThunk<boolean, ILectura>(
+		`Lectura/PutRequest`,
 
 		async (modelo, info) => {
 			return await errorNotification(
@@ -81,7 +91,7 @@ class SensorClassSlice {
 		}
 	);
 	deleteRequest = createAsyncThunk<boolean, number>(
-		`Sensor/DeleteRequest`,
+		`Lectura/DeleteRequest`,
 		async (number, info) => {
 			return await errorNotification(
 				() => this.service.deleteRequest(number),
@@ -90,48 +100,61 @@ class SensorClassSlice {
 		}
 	);
 }
-export const SensorSliceRequests = new SensorClassSlice(sensorService);
+export const LecturaSliceRequests = new LecturaClassSlice(lecturaService);
 
-const initialState: IIniState<ISensor> = {
+const initialState: IIniState<ILectura> = {
 	loading: null,
 	data: null,
 };
 
-export const SensorSlice = createSlice({
-	name: "Sensor",
+export const LecturaSlice = createSlice({
+	name: "Lectura",
 	initialState: initialState,
 	reducers: {},
 	extraReducers: (builder) => {
 		//Nuevos slices que no heredan de generic
 
 		builder.addCase(
-			SensorSliceRequests.getSensorByIdRequest.fulfilled,
+			LecturaSliceRequests.getLecturaByIdRequest.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
 				state.data = action.payload;
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getSensorByIdRequest.rejected,
+			LecturaSliceRequests.getLecturaByIdRequest.rejected,
 			(state, action) => {
 				state.loading = "rejected";
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllLecturasRequest.fulfilled,
+			LecturaSliceRequests.getLecturaBySensorRequest.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
 				state.data = action.payload;
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllLecturasRequest.rejected,
+			LecturaSliceRequests.getLecturaBySensorRequest.rejected,
 			(state, action) => {
 				state.loading = "rejected";
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllLecturasByFechaRequest
+			LecturaSliceRequests.getAllLecturasRequest.fulfilled,
+			(state, action) => {
+				state.loading = "fulfilled";
+				state.data = action.payload;
+			}
+		);
+		builder.addCase(
+			LecturaSliceRequests.getAllLecturasRequest.rejected,
+			(state, action) => {
+				state.loading = "rejected";
+			}
+		);
+		builder.addCase(
+			LecturaSliceRequests.getAllLecturasByFechaRequest
 				.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
@@ -139,46 +162,46 @@ export const SensorSlice = createSlice({
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllLecturasByFechaRequest.rejected,
+			LecturaSliceRequests.getAllLecturasByFechaRequest.rejected,
 			(state, action) => {
 				state.loading = "rejected";
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.postRequest.fulfilled,
+			LecturaSliceRequests.postRequest.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
 				state.data = action.payload;
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.postRequest.rejected,
+			LecturaSliceRequests.postRequest.rejected,
 			(state, action) => {
 				state.loading = "rejected";
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.deleteRequest.fulfilled,
+			LecturaSliceRequests.deleteRequest.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
 				state.data = action.payload;
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.deleteRequest.rejected,
+			LecturaSliceRequests.deleteRequest.rejected,
 			(state, action) => {
 				state.loading = "rejected";
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllRequest.fulfilled,
+			LecturaSliceRequests.getAllRequest.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
 				state.data = action.payload;
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllRequest.rejected,
+			LecturaSliceRequests.getAllRequest.rejected,
 			(state, action) => {
 				state.loading = "rejected";
 			}

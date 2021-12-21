@@ -1,6 +1,7 @@
 import { UsuariosPage } from "app/shared/pages/usuarios/UsuariosPage";
 import React from "react";
 import { Routes, Route } from "react-router-dom";
+import { SensoresCRUD } from "../sensores/SensoresCRUD";
 import { Footer } from "../ui/Footer";
 import { NavBar } from "../ui/NavBar";
 import { HomeScreen } from "./HomeScreen";
@@ -11,9 +12,10 @@ export const DashboardRoutes = () => {
 	return (
 		<>
 			<NavBar />
-			<div className="container mt-2">
+			<div className=" mt-2">
 				<Routes>
 					<Route path="/main" element={<HomeScreen />} />
+					<Route path="/sensores" element={<SensoresCRUD />} />
 					<Route path="/users" element={<UsuariosPage />} />
 					<Route path="/user/new" element={<UsuariosPage />} />
 					{/* <Route path="/hero/:heroeId" element={<SensorScreen />} />

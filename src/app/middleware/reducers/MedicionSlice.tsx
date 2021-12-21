@@ -1,28 +1,29 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { IIniState } from "../../models/IInitState";
-import { ISensor } from "../../models/ISensor";
-import { SensorService } from "../../services/sensor.service";
+import { IIniState } from "app/models/IInitState";
+import { IMedicion } from "app/models/IMedicion";
+import { MedicionService } from "app/services/medicion.service";
 import { errorNotification } from "../helperMiddleware/errorNotifications";
+
 //<IAuth, IAuthUser>
-const sensorService = new SensorService();
+const medicionService = new MedicionService();
 
 interface prop {
 	modeloA: string;
 	modeloB: string;
 }
 
-interface lecturasProp {
+interface medicionesProp {
 	fecha: string;
 }
 
-class SensorClassSlice {
-	constructor(private service: SensorService) {}
-	getAllLecturasRequest = createAsyncThunk<ISensor[], prop>(
-		`Sensor/GetAllLecturas`,
+class MedicionClassSlice {
+	constructor(private service: MedicionService) {}
+	getAllMedicionesRequest = createAsyncThunk<IMedicion[], prop>(
+		`Medicion/GetAllMediciones`,
 		async (modelo, info) => {
 			return await errorNotification(
 				() =>
-					this.service.getAllLecturasRequest(
+					this.service.getAllMedicionesRequest(
 						modelo.modeloA,
 						modelo.modeloB
 					),
@@ -30,29 +31,38 @@ class SensorClassSlice {
 			);
 		}
 	);
-	getSensorByIdRequest = createAsyncThunk<ISensor, number>(
-		`Sensor/Detail`,
+	getMedicionByIdRequest = createAsyncThunk<IMedicion, number>(
+		`Medicion/GetMedicionById`,
 		async (modelo, info) => {
 			return await errorNotification(
-				() => this.service.getSensorByIdRequest(modelo),
+				() => this.service.getMedicionByIdRequest(modelo),
 				info
 			);
 		}
 	);
-	getAllLecturasByFechaRequest = createAsyncThunk<
-		ISensor[],
-		lecturasProp
-	>(`Sensor/GetAllByFecha`, async (modelo, info) => {
+	getMedicionBySensorRequest = createAsyncThunk<IMedicion[], number>(
+		`Medicion/by-sensor`,
+		async (modelo, info) => {
+			return await errorNotification(
+				() => this.service.getMedicionBySensorRequest(modelo),
+				info
+			);
+		}
+	);
+	getAllMedicionesByFechaRequest = createAsyncThunk<
+		IMedicion[],
+		medicionesProp
+	>(`Medicion/GetAllByFecha`, async (modelo, info) => {
 		return await errorNotification(
 			() =>
-				this.service.getAllLecturasByFechaRequest(
+				this.service.getAllMedicionesByFechaRequest(
 					modelo.fecha
 				),
 			info
 		);
 	});
-	getAllRequest = createAsyncThunk<ISensor[]>(
-		`Sensor/GetAll`,
+	getAllRequest = createAsyncThunk<IMedicion[]>(
+		`Medicion/GetAll`,
 		async (info, thunk) => {
 			return await errorNotification(
 				() => this.service.getAllRequest(),
@@ -60,8 +70,8 @@ class SensorClassSlice {
 			);
 		}
 	);
-	postRequest = createAsyncThunk<ISensor, ISensor>(
-		`Sensor/PostRequest`,
+	postRequest = createAsyncThunk<IMedicion, IMedicion>(
+		`Medicion/PostRequest`,
 
 		async (modelo, info) => {
 			return await errorNotification(
@@ -70,8 +80,8 @@ class SensorClassSlice {
 			);
 		}
 	);
-	putRequest = createAsyncThunk<boolean, ISensor>(
-		`Sensor/PutRequest`,
+	putRequest = createAsyncThunk<boolean, IMedicion>(
+		`Medicion/PutRequest`,
 
 		async (modelo, info) => {
 			return await errorNotification(
@@ -81,7 +91,7 @@ class SensorClassSlice {
 		}
 	);
 	deleteRequest = createAsyncThunk<boolean, number>(
-		`Sensor/DeleteRequest`,
+		`Medicion/DeleteRequest`,
 		async (number, info) => {
 			return await errorNotification(
 				() => this.service.deleteRequest(number),
@@ -90,48 +100,61 @@ class SensorClassSlice {
 		}
 	);
 }
-export const SensorSliceRequests = new SensorClassSlice(sensorService);
+export const MedicionSliceRequests = new MedicionClassSlice(medicionService);
 
-const initialState: IIniState<ISensor> = {
+const initialState: IIniState<IMedicion> = {
 	loading: null,
 	data: null,
 };
 
-export const SensorSlice = createSlice({
-	name: "Sensor",
+export const MedicionSlice = createSlice({
+	name: "Medicion",
 	initialState: initialState,
 	reducers: {},
 	extraReducers: (builder) => {
 		//Nuevos slices que no heredan de generic
 
 		builder.addCase(
-			SensorSliceRequests.getSensorByIdRequest.fulfilled,
+			MedicionSliceRequests.getMedicionByIdRequest.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
 				state.data = action.payload;
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getSensorByIdRequest.rejected,
+			MedicionSliceRequests.getMedicionByIdRequest.rejected,
 			(state, action) => {
 				state.loading = "rejected";
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllLecturasRequest.fulfilled,
+			MedicionSliceRequests.getMedicionBySensorRequest.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
 				state.data = action.payload;
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllLecturasRequest.rejected,
+			MedicionSliceRequests.getMedicionBySensorRequest.rejected,
 			(state, action) => {
 				state.loading = "rejected";
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllLecturasByFechaRequest
+			MedicionSliceRequests.getAllMedicionesRequest.fulfilled,
+			(state, action) => {
+				state.loading = "fulfilled";
+				state.data = action.payload;
+			}
+		);
+		builder.addCase(
+			MedicionSliceRequests.getAllMedicionesRequest.rejected,
+			(state, action) => {
+				state.loading = "rejected";
+			}
+		);
+		builder.addCase(
+			MedicionSliceRequests.getAllMedicionesByFechaRequest
 				.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
@@ -139,46 +162,46 @@ export const SensorSlice = createSlice({
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllLecturasByFechaRequest.rejected,
+			MedicionSliceRequests.getAllMedicionesByFechaRequest.rejected,
 			(state, action) => {
 				state.loading = "rejected";
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.postRequest.fulfilled,
+			MedicionSliceRequests.postRequest.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
 				state.data = action.payload;
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.postRequest.rejected,
+			MedicionSliceRequests.postRequest.rejected,
 			(state, action) => {
 				state.loading = "rejected";
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.deleteRequest.fulfilled,
+			MedicionSliceRequests.deleteRequest.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
 				state.data = action.payload;
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.deleteRequest.rejected,
+			MedicionSliceRequests.deleteRequest.rejected,
 			(state, action) => {
 				state.loading = "rejected";
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllRequest.fulfilled,
+			MedicionSliceRequests.getAllRequest.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
 				state.data = action.payload;
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllRequest.rejected,
+			MedicionSliceRequests.getAllRequest.rejected,
 			(state, action) => {
 				state.loading = "rejected";
 			}

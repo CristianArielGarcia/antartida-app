@@ -10,15 +10,18 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { AppUserSliceRequests } from "app/middleware/reducers/appUserSlice";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { useAppDispatch } from "app/middleware/store/store";
+import { IAppUser } from "app/models/IAppUser";
+import { Controller, useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
+import { useNotificationUI } from "app/shared/hooks/useNotificationUI";
+import { first } from "lodash";
 
 function Copyright(props: any) {
 	return (
-		<Typography
-			variant="body2"
-			color="text.secondary"
-			align="center"
-			{...props}
-		>
+		<Typography variant="body2" color="text.secondary" align="center" {...props}>
 			{"Copyright © "}
 			<Link color="inherit" href="https://mui.com/">
 				SGSA
@@ -31,15 +34,50 @@ function Copyright(props: any) {
 
 const theme = createTheme();
 
+const defaultValues = {
+	first_name: "",
+	last_name: "",
+	username: "",
+	email: "",
+	password: "",
+};
+
 export const RegisterScreen = () => {
-	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		const data = new FormData(event.currentTarget);
-		// eslint-disable-next-line no-console
-		console.log({
-			email: data.get("email"),
-			password: data.get("password"),
-		});
+	const dispatch = useAppDispatch();
+	const navigate = useNavigate();
+	const { openNotificationUI } = useNotificationUI();
+
+	const { control, getValues } = useForm({ defaultValues });
+
+	const handleRegister = async () => {
+		const { email, username, password, first_name, last_name } = getValues();
+
+		const nuevoUsuario: IAppUser = {
+			first_name: first_name,
+			last_name: last_name,
+			email: email,
+			username: username,
+			password: password,
+		};
+
+		console.log(nuevoUsuario);
+
+		let fetchRegisterRequest;
+
+		try {
+			fetchRegisterRequest = unwrapResult(
+				await dispatch(AppUserSliceRequests.registerRequest(nuevoUsuario))
+			);
+		} catch (error) {
+			fetchRegisterRequest = null;
+		}
+
+		if (fetchRegisterRequest) {
+			openNotificationUI("Registrado correctamente", "success");
+			navigate("/login");
+		} else {
+			openNotificationUI("No se pudo completar el registro", "error");
+		}
 	};
 
 	return (
@@ -60,61 +98,95 @@ export const RegisterScreen = () => {
 					<Typography component="h1" variant="h5">
 						Registro
 					</Typography>
-					<Box
-						component="form"
-						noValidate
-						onSubmit={handleSubmit}
-						sx={{ mt: 3 }}
-					>
+					<Box component="form" sx={{ mt: 3 }}>
 						<Grid container spacing={2}>
 							<Grid item xs={12} sm={6}>
-								<TextField
-									autoComplete="given-name"
-									name="firstName"
-									required
-									fullWidth
-									id="firstName"
-									label="Nombre"
-									autoFocus
+								<Controller
+									name="first_name"
+									control={control}
+									render={({ field }) => (
+										<TextField
+											{...field}
+											required
+											fullWidth
+											label="Nombre"
+											name="firstName"
+											autoComplete="none"
+										/>
+									)}
 								/>
 							</Grid>
 							<Grid item xs={12} sm={6}>
-								<TextField
-									required
-									fullWidth
-									id="lastName"
-									label="Apellido"
-									name="lastName"
-									autoComplete="family-name"
+								<Controller
+									name="last_name"
+									control={control}
+									render={({ field }) => (
+										<TextField
+											{...field}
+											required
+											fullWidth
+											label="Apellido"
+											name="last_name"
+											autoComplete="none"
+										/>
+									)}
 								/>
 							</Grid>
 							<Grid item xs={12}>
-								<TextField
-									required
-									fullWidth
-									id="email"
-									label="Correo electrónico"
+								<Controller
+									name="username"
+									control={control}
+									render={({ field }) => (
+										<TextField
+											{...field}
+											required
+											fullWidth
+											label="Nombre de usuario"
+											name="username"
+											autoComplete="none"
+										/>
+									)}
+								/>
+							</Grid>
+							<Grid item xs={12}>
+								<Controller
 									name="email"
-									autoComplete="email"
+									control={control}
+									render={({ field }) => (
+										<TextField
+											{...field}
+											required
+											fullWidth
+											id="email"
+											label="Correo electrónico"
+											autoComplete="email"
+										/>
+									)}
 								/>
 							</Grid>
 							<Grid item xs={12}>
-								<TextField
-									required
-									fullWidth
+								<Controller
 									name="password"
-									label="Contraseña"
-									type="password"
-									id="password"
-									autoComplete="new-password"
+									control={control}
+									render={({ field }) => (
+										<TextField
+											{...field}
+											required
+											fullWidth
+											label="Contraseña"
+											type="password"
+											id="password"
+											autoComplete="new-password"
+										/>
+									)}
 								/>
 							</Grid>
 						</Grid>
 						<Button
-							type="submit"
 							fullWidth
 							variant="contained"
 							sx={{ mt: 3, mb: 2 }}
+							onClick={handleRegister}
 						>
 							Registrarse
 						</Button>

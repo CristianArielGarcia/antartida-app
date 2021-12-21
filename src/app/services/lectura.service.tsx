@@ -1,15 +1,16 @@
+import { ILectura } from "app/models/ILectura";
 import axios from "axios";
-import { ISensor } from "../models/ISensor";
 
-export class SensorService {
-	Url = "Sensor";
+
+export class LecturaService {
+	Url = "Lectura";
 	public getAllLecturasRequest(
 		modelA: string,
 		modelB: string
-	): Promise<ISensor[]> {
+	): Promise<ILectura[]> {
 		return new Promise((resolve, reject) => {
 			axios
-				.get<ISensor[]>(
+				.get<ILectura[]>(
 					`${process.env.REACT_APP_API_URL}/${this.Url}/GetAllLecturas/${modelA}/${modelB}`
 				)
 				.then(function (response) {
@@ -20,11 +21,25 @@ export class SensorService {
 				});
 		});
 	}
-	public getSensorByIdRequest(model: number): Promise<ISensor> {
+	public getLecturaByIdRequest(model: number): Promise<ILectura> {
 		return new Promise((resolve, reject) => {
 			axios
-				.get<ISensor>(
-					`${process.env.REACT_APP_API_URL}/${this.Url}/Detail/${model}`
+				.get<ILectura>(
+					`${process.env.REACT_APP_API_URL}/${this.Url}/GetLecturaById/${model}`
+				)
+				.then(function (response) {
+					resolve(response.data);
+				})
+				.catch(function (error) {
+					reject(error);
+				});
+		});
+	}
+	public getLecturaBySensorRequest(model: number): Promise<ILectura[]> {
+		return new Promise((resolve, reject) => {
+			axios
+				.get<ILectura[]>(
+					`${process.env.REACT_APP_API_URL}/${this.Url}/by-sensor/${model}`
 				)
 				.then(function (response) {
 					resolve(response.data);
@@ -36,10 +51,10 @@ export class SensorService {
 	}
 	public getAllLecturasByFechaRequest(
 		modelA: string
-	): Promise<ISensor[]> {
+	): Promise<ILectura[]> {
 		return new Promise((resolve, reject) => {
 			axios
-				.get<ISensor[]>(
+				.get<ILectura[]>(
 					`${process.env.REACT_APP_API_URL}/${this.Url}/GetAllByFecha/${modelA}`
 				)
 				.then(function (response) {
@@ -50,10 +65,10 @@ export class SensorService {
 				});
 		});
 	}
-	public getAllRequest(): Promise<ISensor[]> {
+	public getAllRequest(): Promise<ILectura[]> {
 		return new Promise((resolve, reject) => {
 			axios
-				.get<ISensor[]>(
+				.get<ILectura[]>(
 					`${process.env.REACT_APP_API_URL}/${this.Url}/GetAll`
 				)
 				.then(function (response) {
@@ -64,10 +79,10 @@ export class SensorService {
 				});
 		});
 	}
-	public postRequest(entity: ISensor): Promise<ISensor> {
+	public postRequest(entity: ILectura): Promise<ILectura> {
 		return new Promise((resolve, reject) => {
 			axios
-				.post<ISensor>(
+				.post<ILectura>(
 					`${process.env.REACT_APP_API_URL}/${this.Url}`,
 					entity
 				)
@@ -79,7 +94,7 @@ export class SensorService {
 				});
 		});
 	}
-	public putRequest(entity: ISensor): Promise<boolean> {
+	public putRequest(entity: ILectura): Promise<boolean> {
 		return new Promise((resolve, reject) => {
 			axios
 				.put<boolean>(

@@ -13,15 +13,16 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
+import { unwrapResult } from "@reduxjs/toolkit";
+import { AppUserSliceRequests } from "app/middleware/reducers/appUserSlice";
+import { useNotificationUI } from "app/shared/hooks/useNotificationUI";
+import { useAppDispatch } from "app/middleware/store/store";
+import { Controller, useForm } from "react-hook-form";
+import { IAuthRequest } from "app/models/IAuthRequest";
 
 function Copyright(props: any) {
 	return (
-		<Typography
-			variant="body2"
-			color="text.secondary"
-			align="center"
-			{...props}
-		>
+		<Typography variant="body2" color="text.secondary" align="center" {...props}>
 			{"Copyright © "}
 			<Link color="inherit" href="https://mui.com/">
 				SGSA
@@ -32,20 +33,39 @@ function Copyright(props: any) {
 	);
 }
 
+const defaultValues: IAuthRequest = {
+	email: "",
+	password: "",
+};
+
 const theme = createTheme();
 
 export const LoginScreen = () => {
-	const navigate = useNavigate();
-	const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-		event.preventDefault();
-		const data = new FormData(event.currentTarget);
-		// eslint-disable-next-line no-console
-		console.log({
-			email: data.get("email"),
-			password: data.get("password"),
-		});
+	const dispatch = useAppDispatch();
+	const { openNotificationUI } = useNotificationUI();
 
-		navigate("/main");
+	const { control, getValues } = useForm({ defaultValues });
+
+	const navigate = useNavigate();
+	const handleLogin = async () => {
+		const { email, password } = getValues();
+
+		let fetchLoginResponse;
+
+		try {
+			fetchLoginResponse = unwrapResult(
+				await dispatch(AppUserSliceRequests.LoginUser({ email: email, password: password }))
+			);
+		} catch (error) {
+			fetchLoginResponse = null;
+		}
+
+		if (fetchLoginResponse) {
+			openNotificationUI("Inicio de sesión correcto", "success");
+			navigate("/main");
+		} else {
+			openNotificationUI("Error al iniciar sesión", "error");
+		}
 	};
 
 	return (
@@ -66,43 +86,45 @@ export const LoginScreen = () => {
 					<Typography component="h1" variant="h5">
 						Iniciar Sesión
 					</Typography>
-					<Box
-						component="form"
-						onSubmit={handleSubmit}
-						noValidate
-						sx={{ mt: 1 }}
-					>
-						<TextField
-							margin="normal"
-							required
-							fullWidth
-							id="email"
-							label="Correo electrónico"
+					<Box component="form" sx={{ mt: 1 }}>
+						<Controller
 							name="email"
-							autoComplete="email"
-							autoFocus
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									required
+									fullWidth
+									label="Correo electrónico"
+									name="email"
+									autoComplete="none"
+								/>
+							)}
 						/>
-						<TextField
-							margin="normal"
-							required
-							fullWidth
+						<Controller
 							name="password"
-							label="Contraseña"
-							type="password"
-							id="password"
-							autoComplete="current-password"
+							control={control}
+							render={({ field }) => (
+								<TextField
+									{...field}
+									required
+									fullWidth
+									type="password"
+									label="Contraseña"
+									name="contraseña"
+									autoComplete="none"
+								/>
+							)}
 						/>
 						<FormControlLabel
-							control={
-								<Checkbox value="remember" color="primary" />
-							}
+							control={<Checkbox value="remember" color="primary" />}
 							label="Recordarme"
 						/>
 						<Button
-							type="submit"
 							fullWidth
 							variant="contained"
 							sx={{ mt: 3, mb: 2 }}
+							onClick={handleLogin}
 						>
 							Iniciar Sesión
 						</Button>

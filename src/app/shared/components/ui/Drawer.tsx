@@ -207,6 +207,20 @@ export const Drawer = (): JSX.Element => {
 									/>
 								</ListItem>
 							</div>
+							<div className="flex items-center">
+								<ChevronRight className="text-black-50" />
+								<ListItem
+									button
+									onClick={() => {
+										historyPush("/sensores");
+									}}
+								>
+									<ListItemText
+										primary={"Gestión de sensores"}
+										className="text-black-50"
+									/>
+								</ListItem>
+							</div>
 						</AccordionDetails>
 					</Accordion>
 					<Accordion className={classes.accordion}>
