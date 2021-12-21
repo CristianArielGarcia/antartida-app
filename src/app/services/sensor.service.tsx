@@ -35,12 +35,14 @@ export class SensorService {
 		});
 	}
 	public getAllLecturasByFechaRequest(
-		modelA: string
+		desde: string,
+		hasta: string,
+		sensor: number
 	): Promise<ISensor[]> {
 		return new Promise((resolve, reject) => {
 			axios
 				.get<ISensor[]>(
-					`${process.env.REACT_APP_API_URL}/${this.Url}/GetAllByFecha/${modelA}`
+					`${process.env.REACT_APP_API_URL}/${this.Url}/${sensor}/Lecturas/GetAllByFecha?desde=${desde}&hasta=${hasta}`
 				)
 				.then(function (response) {
 					resolve(response.data);
