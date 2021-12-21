@@ -6,7 +6,7 @@ import { RegisterScreen } from "../shared/components/auth/RegisterScreen";
 import { DashboardRoutes } from "../shared/components/dashboard/DashboardRoutes";
 import { PublicRoute } from "./PublicRoute";
 import { PrivateRoute } from "./PrivateRoute";
-import { ContactUs } from "../shared/components/contact/ContactUs";
+import { ContactUs } from "../shared/components/contacto/ContactUs";
 import {
 	adaptV4Theme,
 	createTheme,

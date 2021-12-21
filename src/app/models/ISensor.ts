@@ -1,5 +1,5 @@
 export interface ISensor {
-	id: number;
+	id?: number;
 	nombre?: string | null;
 	latitud?: number | null;
 	longitud?: number | null;
