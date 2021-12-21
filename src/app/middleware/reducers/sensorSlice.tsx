@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { ILectura } from "app/models/ILectura";
 import { IIniState } from "../../models/IInitState";
 import { ISensor } from "../../models/ISensor";
 import { SensorService } from "../../services/sensor.service";
@@ -12,7 +13,9 @@ interface prop {
 }
 
 interface lecturasProp {
-	fecha: string;
+	desde: any;
+	hasta: any;
+	sensor: any;
 }
 
 class SensorClassSlice {
@@ -40,13 +43,16 @@ class SensorClassSlice {
 		}
 	);
 	getAllLecturasByFechaRequest = createAsyncThunk<
-		ISensor[],
+		ILectura[],
 		lecturasProp
-	>(`Sensor/GetAllByFecha`, async (modelo, info) => {
+	>(`Sensor/GetAllByFecha`, 
+	async (modelo, info) => {
 		return await errorNotification(
 			() =>
 				this.service.getAllLecturasByFechaRequest(
-					modelo.fecha
+					modelo.desde,
+					modelo.hasta,
+					modelo.sensor,
 				),
 			info
 		);
@@ -131,8 +137,7 @@ export const SensorSlice = createSlice({
 			}
 		);
 		builder.addCase(
-			SensorSliceRequests.getAllLecturasByFechaRequest
-				.fulfilled,
+			SensorSliceRequests.getAllLecturasByFechaRequest.fulfilled,
 			(state, action) => {
 				state.loading = "fulfilled";
 				state.data = action.payload;

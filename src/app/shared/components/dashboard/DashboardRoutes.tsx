@@ -1,6 +1,6 @@
+import { UsuariosPage } from "app/shared/pages/usuarios/UsuariosPage";
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import { UsuariosPage } from "../../pages/usuarios/UsuariosPage";
 import { Footer } from "../ui/Footer";
 import { NavBar } from "../ui/NavBar";
 import { HomeScreen } from "./HomeScreen";
