@@ -3,7 +3,6 @@ import { Dialog, DialogTitle, DialogContent } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { makeStyles } from "@mui/styles";
 
-
 const useStyles = makeStyles((theme) => ({
 	dialogWrapper: {
 		padding: theme.spacing(1),
@@ -54,7 +53,7 @@ export const ModalCompoment = ({
 			<DialogTitle>
 				<div className="bg-gradient-to-r from-newsan via-newsanLighten to-newsan shadow-elevation-6 rounded-md text-gray-900 dark:text-gray-200 ">
 					<div className="rounded-xl text-center px-4 py-2">
-						<h1 className="text-2xl text-gray-50">{title}</h1>
+						<h1 className="text-2xl text-gray-900 dark:text-gray-50 ">{title}</h1>
 					</div>
 				</div>
 			</DialogTitle>

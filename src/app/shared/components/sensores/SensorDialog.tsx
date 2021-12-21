@@ -43,7 +43,7 @@ export const SensorDialog = ({ idSensor, setOpenPopup, callback }: props): JSX.E
 	const useButtons: any = makeStyles(() =>
 		createStyles({
 			textColor: {
-				color: darkMode ? "rgba(250, 250, 250, 0.9)" : "#c80f4d",
+				color: darkMode ? "rgba(250, 250, 250, 0.9)" : "rgba(114, 114, 115)",
 			},
 		})
 	);
