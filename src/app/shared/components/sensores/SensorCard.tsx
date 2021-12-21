@@ -14,7 +14,7 @@ interface props {
 
 export const SensorCard = ({ sensor,onVerGrafico }: props) => {
 	return (
-		<Card sx={{ maxWidth: 150 }}>
+		<Card sx={{ maxWidth: 200 }}>
 			<CardContent>
 				<Typography gutterBottom variant="h5" component="div">
 					{sensor.nombre}
@@ -24,7 +24,8 @@ export const SensorCard = ({ sensor,onVerGrafico }: props) => {
 				</Typography>
 			</CardContent>
 			<CardActions>
-				<Button onClick= { (evento) => onVerGrafico(evento)} value={sensor.id} size="small" variant="contained">Ver Gráfico</Button>
+				<input type="radio" name="foo" />
+				{/* <Button onClick= { (evento) => onVerGrafico(evento)} value={sensor.id} size="small" variant="contained">Seleccionar</Button> */}
                 <Switch defaultChecked />
 			</CardActions>
 		</Card>
